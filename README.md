@@ -6,7 +6,7 @@ change dockerignore to .dockerignore
 then follow the steps:
 
 on the folder path terminal use:
-                **<you img build>
+               
 docker build -t my-env-flask-app .
 
 docker run -d \
