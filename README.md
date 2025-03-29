@@ -5,8 +5,7 @@ change env to .env
 change dockerignore to .dockerignore
 then follow the steps:
 
-on the folder path terminal use:
-               
+# on the folder path terminal use:               
 docker build -t my-env-flask-app .
 
 docker run -d \
@@ -15,5 +14,14 @@ docker run -d \
   -p 5000:5000 \
   my-env-flask-app
 
-to see logs:
+* to see logs:
 docker logs <your_img_name> -f
+
+
+* you can pul this docker img:
+docker pull liortal26/my-flask-app:v1.0.1
+
+* for inspect using jq:
+sudo apt install jq
+
+docker inspect liortal26/my-flask-app:v1.0.1 | jq
