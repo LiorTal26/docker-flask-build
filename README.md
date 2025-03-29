@@ -3,7 +3,7 @@
 for env build:
 change env to .env
 change dockerignore to .dockerignore
---then follow the steps:
+#then follow the steps:
 
 on the folder path terminal use:
                 <you img build>
