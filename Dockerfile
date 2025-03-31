@@ -16,7 +16,7 @@ RUN apt update && apt install vim -y
 COPY . .
 
 # Expose port 5000 for Flask
-EXPOSE 5000
+EXPOSE 4000
 
 # Run the Flask app
 CMD ["python", "flask_docker.py"]
