@@ -1,0 +1,36 @@
+name: Push Registry Info to External Repo
+
+on:
+  workflow_run:
+    workflows: ["Build Docker image and push to Docker hub"]
+    types:
+      - completed
+
+jobs:
+  push-registry-info:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifact from previous workflow
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: Build Docker image and push to Docker hub
+          name: registry-info
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.TARGET_REPO_SSH_KEY }}
+
+      - name: Clone target repo and push registry-info.json
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@users.noreply.github.com"
+          git clone git@github.com:shapi78/test-repo.git target-repo
+          cp registry-info.json target-repo/
+          cd target-repo
+          git checkout -b lior-branch || git checkout lior-branch
+          git add registry-info.json
+          git commit -m "Update registry info with new image"
+          git push origin lior-branch
