@@ -1,4 +1,4 @@
-name: Build Docker image, push it, and commit info to external repo using SSH
+name: Build Docker image, push it, and update info in external repo
 
 on:
   push:
@@ -43,17 +43,17 @@ jobs:
       - name: Set up SSH key for pushing to external repo
         uses: webfactory/ssh-agent@v0.5.4
         with:
-          ssh-private-key: ${{ secrets.PAT_FOR_TEST_REPO }}
+          ssh-private-key: ${{ secrets.PAT_FOR_TEST_REPO }}  # your private SSH key (even if name says PAT)
 
       - name: Push registry-info.json to external repo via SSH
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "github-actions@users.noreply.github.com"
           git clone git@github.com:shapi78/test-repo.git target-repo
-          cp registry-info.json target-repo/
           cd target-repo
           git checkout -b lior-branch || git checkout lior-branch
           git pull origin lior-branch --rebase
+          cp ../registry-info.json .
           git add registry-info.json
           git commit -m "Update registry info with image: ${{ steps.set-tag.outputs.image-tag }}" || echo "No changes to commit"
           git push origin lior-branch
