@@ -1,4 +1,4 @@
-name: Build Docker image, push it, and commit info to external repo
+name: Build Docker image, push it, and commit info to your test repo
 
 on:
   push:
@@ -40,11 +40,11 @@ jobs:
         run: |
           echo '{ "image": "${{ steps.set-tag.outputs.image-tag }}", "timestamp": "'$(date -u +'%Y-%m-%dT%H:%M:%SZ')'", "git_sha": "${{ github.sha }}" }' > registry-info.json
 
-      - name: Push registry-info.json to external repo using HTTPS and token
+      - name: Push registry-info.json to test-repo using PAT
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "github-actions@users.noreply.github.com"
-          git clone https://x-access-token:${{ secrets.PAT_FOR_TEST_REPO }}@github.com/shapi78/test-repo.git target-repo
+          git clone https://x-access-token:${{ secrets.PAT_FOR_TEST_REPO }}@github.com/LiorTal26/test-repo.git target-repo
           cp registry-info.json target-repo/
           cd target-repo
           git checkout -b lior-branch || git checkout lior-branch
