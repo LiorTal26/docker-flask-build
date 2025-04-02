@@ -43,7 +43,7 @@ jobs:
       - name: Set up SSH key for pushing to external repo
         uses: webfactory/ssh-agent@v0.5.4
         with:
-          ssh-private-key: ${{ secrets.PAT_FOR_TEST_REPO }}  # ← yes, you're using this for the SSH private key
+          ssh-private-key: ${{ secrets.PAT_FOR_TEST_REPO }}
 
       - name: Push registry-info.json to external repo via SSH
         run: |
@@ -53,6 +53,7 @@ jobs:
           cp registry-info.json target-repo/
           cd target-repo
           git checkout -b lior-branch || git checkout lior-branch
+          git pull origin lior-branch --rebase
           git add registry-info.json
-          git commit -m "Update registry info with image: ${{ steps.set-tag.outputs.image-tag }}"
+          git commit -m "Update registry info with image: ${{ steps.set-tag.outputs.image-tag }}" || echo "No changes to commit"
           git push origin lior-branch
