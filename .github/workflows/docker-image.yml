@@ -47,13 +47,29 @@ jobs:
 
       - name: Push registry-info.json to external repo via SSH
         run: |
+          # Configure Git
           git config --global user.name "GitHub Actions"
           git config --global user.email "github-actions@users.noreply.github.com"
+
+          # Clone remote repo
           git clone git@github.com:shapi78/test-repo.git target-repo
           cd target-repo
+
+          # Create or checkout branch
           git checkout -b lior-branch || git checkout lior-branch
-          git pull origin lior-branch  # ✅ safe merge instead of rebase
+
+          # Configure pull to use merge strategy (no fast-forward or rebase)
+          git config pull.rebase false
+
+          # Pull remote changes on lior-branch
+          git pull origin lior-branch
+
+          # Copy the JSON file from parent folder
           cp ../registry-info.json .
+
+          # Stage & commit the file
           git add registry-info.json
           git commit -m "Update registry info with image: ${{ steps.set-tag.outputs.image-tag }}" || echo "No changes to commit"
+
+          # Push changes
           git push origin lior-branch
