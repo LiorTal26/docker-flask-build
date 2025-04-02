@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      
+
 permissions:
   contents: write
   id-token: write
@@ -40,16 +40,11 @@ jobs:
         run: |
           echo '{ "image": "${{ steps.set-tag.outputs.image-tag }}", "timestamp": "'$(date -u +'%Y-%m-%dT%H:%M:%SZ')'", "git_sha": "${{ github.sha }}" }' > registry-info.json
 
-      - name: Set up SSH for pushing to external repo
-        uses: webfactory/ssh-agent@v0.5.4
-        with:
-          ssh-private-key: ${{ secrets.TARGET_REPO_SSH_KEY }}
-
-      - name: Push registry-info.json to external repo
+      - name: Push registry-info.json to external repo using HTTPS and token
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "github-actions@users.noreply.github.com"
-          git clone git@github.com:shapi78/test-repo.git target-repo
+          git clone https://x-access-token:${{ secrets.PAT_FOR_TEST_REPO }}@github.com/shapi78/test-repo.git target-repo
           cp registry-info.json target-repo/
           cd target-repo
           git checkout -b lior-branch || git checkout lior-branch
