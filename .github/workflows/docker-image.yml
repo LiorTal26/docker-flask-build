@@ -58,18 +58,18 @@ jobs:
           # Create or checkout branch
           git checkout -b lior-branch || git checkout lior-branch
 
-          # Configure pull to use merge strategy (no fast-forward or rebase)
+          # Configure to merge changes, not rebase
           git config pull.rebase false
 
-          # Pull remote changes on lior-branch
-          git pull origin lior-branch
+          # Pull remote changes, allowing unrelated histories
+          git pull origin lior-branch --allow-unrelated-histories
 
-          # Copy the JSON file from parent folder
+          # Copy updated registry-info.json from parent folder
           cp ../registry-info.json .
 
-          # Stage & commit the file
+          # Commit updated file
           git add registry-info.json
           git commit -m "Update registry info with image: ${{ steps.set-tag.outputs.image-tag }}" || echo "No changes to commit"
 
-          # Push changes
+          # Push the merged result back
           git push origin lior-branch
