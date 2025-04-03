@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy your requirements file first (better for caching)
 COPY req_docker_pip.txt .
-
+#test git actions
 # Install dependencies from requirements file
 RUN pip install --no-cache-dir -r req_docker_pip.txt
 RUN apt update && apt install vim -y
