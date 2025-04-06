@@ -4,7 +4,10 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
+            script {
+                echo 'Building Docker image...'
+                sh 'docker build -t flask-build-pipeline .'
+            }
             }
         }
         stage('Test') {
