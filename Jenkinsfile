@@ -22,15 +22,6 @@ pipeline {
                 }
             }
         }
-        stage('test-snyk') {
-            steps {
-                snykSecurity(
-                    snykInstallation: 'snyk-image',
-                    snykTokenId: 'liortal26-snyk',
-                    additionalArguments: '--docker liortal26/flask-build-pipeline:latest --all-projects --all-sub-projects'
-                )
-            }
-        }
         stage('Push Image') {
             steps {
                 script {
@@ -41,6 +32,15 @@ pipeline {
                         sh "docker push ${IMAGE_NAME}:${TAG}"
                     }
                 }
+            }
+        }
+        stage('test-snyk') {
+            steps {
+                snykSecurity(
+                    snykInstallation: 'snyk-image',
+                    snykTokenId: 'liortal26-snyk',
+                    additionalArguments: '--docker liortal26/flask-build-pipeline:latest'
+                )
             }
         }
         stage('Deploy') {
