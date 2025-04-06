@@ -1,6 +1,12 @@
 pipeline {
     agent any
-    
+    options {
+        ansiColor('xterm')
+    }
+    environment {
+        IMAGE_NAME = 'liortal26/flask-build-pipeline'
+        TAG = 'latest'
+    }
     stages {
         stage('Build Image') {
             agent {
@@ -14,39 +20,42 @@ pipeline {
                 }
             }
         }
-        stage('test-snyk'){
+        stage('test-snyk') {
             steps {
-                script {
-                    echo 'Running Snyk test...'
-                    withCredentials([string(credentialsId: 'liortal26-snyk', variable: 'SNYK_TOKEN')]) {
-                        sh 'snyk test --docker flask-build-pipeline:latest --all-projects --json-file-output=snyk-report.json'
-                    }
-                }
+                snykSecurity(
+                    snykInstallation: 'snyk',
+                    snykTokenId: 'liortal26-snyk',
+                    additionalArguments: "--docker ${IMAGE_NAME}:${TAG} --all-projects --json"
+                )
             }
         }
         stage('Push Image') {
             steps {
                 script {
                     echo 'Tagging and pushing image to Docker Hub...'
-                    sh 'docker tag flask-build-pipeline:latest liortal26/flask-build-pipeline:latest'
+                    sh "docker tag ${IMAGE_NAME}:${TAG} ${IMAGE_NAME}:${TAG}"
                     withCredentials([string(credentialsId: 'docker-token', variable: 'DOCKER_TOKEN')]) {
                         sh 'echo $DOCKER_TOKEN | docker login -u liortal26 --password-stdin'
-                        sh 'docker push liortal26/flask-build-pipeline:latest'
+                        sh "docker push ${IMAGE_NAME}:${TAG}"
                     }
                 }
             }
         }
         stage('Build-xtrem') {
             steps {
-                wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
-                    echo "\033[34mHello\033[0m \033[33mcolorful\033[0m \033[35mworld!\033[0m"
-                }
+                echo "Hello colorful world!"
             }
         }
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
             }
+        }
+    }
+    post {
+        failure {
+            echo 'Pipeline failed. Sending notification...'
+            // Add notification logic here (e.g., email or Slack)
         }
     }
 }
