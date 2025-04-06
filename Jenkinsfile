@@ -1,9 +1,7 @@
 pipeline {
     agent any
 
-    options {
-        ansiColor('xterm')
-    }
+    // Removed global ansiColor option as it should be used in specific stages
     
     stages {
         stage('Build Image') {
@@ -37,11 +35,13 @@ pipeline {
         }
         stage('Build-xtrem') {
             steps {
-                echo '\033[34mHello\033[0m \033[33mcolorful\033[0m \033[35mworld!\033[0m'
+        stage('Build-xtrem') {
+            steps {
+                ansiColor('xterm') {
+                    echo '\033[34mHello\033[0m \033[33mcolorful\033[0m \033[35mworld!\033[0m'
+                }
             }
         }
-        stage('Test') {
-            steps {
                 echo 'Testing..'
             }
         }
