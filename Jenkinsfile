@@ -1,23 +1,11 @@
 pipeline {
-    agent any
-
+    agent {
+        docker { image 'node:22.14.0-alpine3.21' }
+    }
     stages {
-        stage('Build') {
-            steps {
-            script {
-                echo 'Building Docker image...'
-                sh 'docker build -t flask-build-pipeline .'
-            }
-            }
-        }
         stage('Test') {
             steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
+                sh 'node --eval "console.log(process.platform,process.env.CI)"'
             }
         }
     }
