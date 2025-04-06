@@ -27,7 +27,7 @@ pipeline {
                 snykSecurity(
                     snykInstallation: 'snyk-image',
                     snykTokenId: 'liortal26-snyk',
-                    additionalArguments: "--docker ${IMAGE_NAME}:${TAG} --all-projects --json"
+                    additionalArguments: '--docker liortal26/flask-build-pipeline:latest --all-projects --all-sub-projects'
                 )
             }
         }
@@ -41,11 +41,6 @@ pipeline {
                         sh "docker push ${IMAGE_NAME}:${TAG}"
                     }
                 }
-            }
-        }
-        stage('Build-xtrem') {
-            steps {
-                echo "Hello colorful world!"
             }
         }
         stage('Deploy') {
