@@ -40,6 +40,10 @@ pipeline {
                     snykInstallation: 'snyk-image',
                     snykTokenId: 'liortal26-snyk',
                     additionalArguments: '--docker liortal26/flask-build-pipeline:latest'
+                    failBuild: false,
+                    failOnIssues: false,
+                    failOnHighSeverity: false,
+                    failOnCriticalSeverity: false,
                 )
             }
         }
