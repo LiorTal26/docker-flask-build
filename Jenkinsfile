@@ -39,10 +39,9 @@ pipeline {
                 snykSecurity(
                     snykInstallation: 'snyk-image',
                     snykTokenId: 'liortal26-snyk',
-                    additionalArguments: '--docker liortal26/flask-build-pipeline:latest'
-                    failOnIssues: false,
-                    failOnHighSeverity: false,
-                    failOnCriticalSeverity: false,
+                    additionalArguments: '--docker liortal26/flask-build-pipeline:latest',
+                    failOnIssues: 'false'
+                    
                 )
             }
         }
