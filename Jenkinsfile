@@ -14,6 +14,16 @@ pipeline {
                 }
             }
         }
+        stage('test-snyk'){
+            steps {
+                script {
+                    echo 'Running Snyk test...'
+                    withCredentials([string(credentialsId: 'liortal26-snyk', variable: 'SNYK_TOKEN')]) {
+                        sh 'snyk test --docker flask-build-pipeline:latest --all-projects --json-file-output=snyk-report.json'
+                    }
+                }
+            }
+        }
         stage('Push Image') {
             steps {
                 script {
@@ -28,8 +38,8 @@ pipeline {
         }
         stage('Build-xtrem') {
             steps {
-                ansiColor('xterm') {
-                    echo '\033[34mHello\033[0m \033[33mcolorful\033[0m \033[35mworld!\033[0m'
+                wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
+                    echo "\033[34mHello\033[0m \033[33mcolorful\033[0m \033[35mworld!\033[0m"
                 }
             }
         }
