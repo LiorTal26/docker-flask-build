@@ -35,8 +35,6 @@ pipeline {
         }
         stage('Build-xtrem') {
             steps {
-        stage('Build-xtrem') {
-            steps {
                 ansiColor('xterm') {
                     echo '\033[34mHello\033[0m \033[33mcolorful\033[0m \033[35mworld!\033[0m'
                 }
