@@ -25,7 +25,7 @@ pipeline {
         stage('test-snyk') {
             steps {
                 snykSecurity(
-                    snykInstallation: 'snyk',
+                    snykInstallation: 'snyk-image',
                     snykTokenId: 'liortal26-snyk',
                     additionalArguments: "--docker ${IMAGE_NAME}:${TAG} --all-projects --json"
                 )
