@@ -3,6 +3,7 @@ pipeline {
     options {
         ansiColor('xterm')
     }
+    
     environment {
         IMAGE_NAME = 'liortal26/flask-build-pipeline'
         TAG = 'latest'
@@ -17,6 +18,7 @@ pipeline {
             steps {
                 script {
                     echo 'Built image from Dockerfile using dockerfile agent.'
+                    echo 'echo -e "\033[0;32mHello colorful world!\033[0m"'
                 }
             }
         }
@@ -55,7 +57,6 @@ pipeline {
     post {
         failure {
             echo 'Pipeline failed. Sending notification...'
-            // Add notification logic here (e.g., email or Slack)
         }
     }
 }
