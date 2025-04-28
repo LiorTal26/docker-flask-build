@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir -r req_docker_pip.txt
 # Copy the rest of the application
 COPY . .
 
-# Expose port 4000 for Flask
+# Expose port 5000 for Flask
 EXPOSE 5000
 
 # Run the Flask app
